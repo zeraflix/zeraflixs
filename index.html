@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f5a35a">
+<meta name="format-detection" content="telephone=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Zeraflix, sana bir şey söylemem lazım</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Manrope:wght@400;600;800&display=swap">
 <style>
@@ -170,16 +174,6 @@ body.rewind #ui{animation:rewind 1.1s linear}
 .bf svg{width:100%;filter:drop-shadow(0 0 8px rgba(255,220,160,.8))}
 @keyframes bfDrift{0%{opacity:0;transform:translate(0,0)}10%{opacity:.9}50%{transform:translate(45vw,-25vh) rotate(12deg)}90%{opacity:.9}100%{opacity:0;transform:translate(90vw,-6vh) rotate(-8deg)}}
 
-/* png panel */
-#gear{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:90;width:40px;height:40px;border-radius:50%;
-  border:1px solid var(--glass-edge);background:rgba(0,0,0,.3);font-size:17px;cursor:pointer;opacity:.5;backdrop-filter:blur(8px)}
-#gear:hover,#gear:focus-visible{opacity:1}
-#panel{position:fixed;left:10px;bottom:60px;z-index:90;display:none;max-width:290px;padding:14px 16px;font-size:14px;background:rgba(12,23,28,.92);border:1px solid var(--glass-edge);border-radius:16px}
-#panel.on{display:block}
-#panel label{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:7px 0;font-weight:600}
-#panel input{max-width:150px;font-size:12px;color:var(--ink)}
-#panel small{display:block;color:var(--ink-soft);line-height:1.35;margin-top:8px}
-
 @media (max-width:640px){
   .stage{flex-direction:column;gap:22px}
   .polaroid{width:min(52vw,220px)}
@@ -193,7 +187,7 @@ body.rewind #ui{animation:rewind 1.1s linear}
 }
 
 html{-webkit-text-size-adjust:100%}
-button,.cta,#yes,#no,.next,#again,#gear{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+button,.cta,#yes,#no,.next,#again{touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .polaroid{width:min(34vw,300px,44vh)}
 @media (max-width:640px){
   .grain{animation:none;opacity:.07}
@@ -225,8 +219,6 @@ button,.cta,#yes,#no,.next,#again,#gear{touch-action:manipulation;-webkit-user-s
   #uniLine{font-size:clamp(28px,8.4vw,44px);max-width:18ch}
   #evetSub{font-size:clamp(22px,6.4vw,30px)}
   #again{min-height:44px}
-  #gear{width:36px;height:36px;left:calc(8px + env(safe-area-inset-left,0px))}
-  #panel{left:8px;right:8px;max-width:none;bottom:56px}
 }
 @media (max-height:560px) and (orientation:landscape){
   .scene{padding-top:12px;padding-bottom:12px}
@@ -245,6 +237,58 @@ button,.cta,#yes,#no,.next,#again,#gear{touch-action:manipulation;-webkit-user-s
   .anger{margin-top:12px;padding:8px 12px}
   .gauge{width:66px;height:66px}
   #uniLine{font-size:clamp(24px,8vh,40px)}
+}
+
+/* ===== mobil + performans yaması ===== */
+html,body{overscroll-behavior:none;-webkit-touch-callout:none}
+#gl,#fb{transform:translateZ(0)}
+.polaroid .photo img,.gauge .face img{pointer-events:none;-webkit-user-drag:none;user-select:none;-webkit-user-select:none;image-rendering:auto}
+.polaroid,.dialog,.askcard{-webkit-transform:translateZ(0)}
+.dialog,.askcard{-webkit-tap-highlight-color:transparent}
+@media (hover:none){
+  .cta:hover{transform:none}
+}
+@media (pointer:coarse),(max-width:820px){
+  .grain{display:none}
+  .glass{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 12px 32px rgba(0,0,0,.35);background:linear-gradient(160deg,rgba(255,255,255,.26),rgba(255,255,255,.12))}
+  .notice,#again,#no.run{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,16,22,.72)}
+  .polaroid{box-shadow:0 14px 30px rgba(0,0,0,.45)}
+  .polaroid.boss:before{filter:none;inset:-16px}
+  .vignette{display:none}
+}
+@supports not (backdrop-filter:blur(1px)){
+  .glass{background:rgba(20,30,40,.55)}
+}
+@media (max-width:360px){
+  #intro h1{font-size:clamp(56px,20vw,90px)}
+  .dialog p{font-size:clamp(17px,5.2vw,21px)}
+  .askcard h1{font-size:clamp(36px,12vw,52px)}
+}
+
+/* ===== mobil okunurluk yaması ===== */
+@media (max-width:820px),(pointer:coarse){
+  :root{--ink-soft:rgba(255,246,230,.94)}
+  .glass{background:linear-gradient(160deg,rgba(10,16,26,.62),rgba(10,16,26,.46));border-color:rgba(255,255,255,.28);text-shadow:0 1px 3px rgba(0,0,0,.55),0 2px 14px rgba(0,0,0,.4)}
+  #intro p{font-family:var(--ui);font-weight:700;font-size:clamp(18px,5.2vw,22px);line-height:1.4;color:var(--ink);max-width:24ch;text-shadow:0 1px 3px rgba(0,0,0,.7),0 2px 18px rgba(0,0,0,.6)}
+  .dialog p{font-size:clamp(21px,5.8vw,27px);font-weight:700;line-height:1.42;letter-spacing:0;color:#fff}
+  .next{font-size:18px;font-weight:800}
+  .small{font-size:clamp(26px,7vw,32px);text-shadow:0 1px 3px rgba(0,0,0,.6)}
+  .askcard h1{text-shadow:0 2px 4px rgba(0,0,0,.55),0 4px 24px rgba(0,0,0,.5)}
+  .ttl{font-size:17px}
+  .sub{font-size:13.5px;color:rgba(255,246,230,.95)}
+  .chip{font-size:13px;padding:5px 12px;background:rgba(255,255,255,.3);font-weight:800}
+  #patSay{font-family:var(--ui);font-weight:700;font-size:16px;line-height:1.3;color:#fff;min-width:0}
+  .notice span{font-size:15px;color:#fff}
+  #uniLine{font-family:var(--ui);font-weight:800;font-size:clamp(23px,6.4vw,31px);line-height:1.28;max-width:22ch;padding:14px 18px;border-radius:20px;
+    background:rgba(8,14,22,.58);text-shadow:0 1px 3px rgba(0,0,0,.6);letter-spacing:0;text-wrap:balance}
+  #evetSub{font-family:var(--ui);font-weight:800;font-size:clamp(20px,5.6vw,26px);line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,.7),0 2px 16px rgba(0,0,0,.6)}
+  #evet{text-shadow:0 4px 6px rgba(0,0,0,.35),0 10px 50px rgba(0,0,0,.6)}
+  #again{font-size:16px;font-weight:800;background:rgba(8,14,22,.7);color:#fff}
+  .polaroid figcaption{font-size:22px;opacity:.9}
+}
+@media (max-width:360px){
+  .dialog p{font-size:clamp(19px,5.6vw,22px)}
+  #uniLine{font-size:clamp(20px,6vw,24px)}
 }
 </style>
 </head>
@@ -336,18 +380,6 @@ button,.cta,#yes,#no,.next,#again,#gear{touch-action:manipulation;-webkit-user-s
 <div class="bf" id="bf1" style="left:4vw;bottom:22vh;animation-delay:0s"></div>
 <div class="bf" id="bf2" style="left:0;bottom:48vh;animation-delay:5s;width:22px"></div>
 <div class="bf" id="bf3" style="left:8vw;bottom:8vh;animation-delay:9s;width:34px"></div>
-
-<button id="gear" aria-label="PNG karakterleri ekle" title="Kendi PNG'lerini ekle">🖼</button>
-<div id="panel">
-  <strong>Kendi PNG'lerini ekle</strong>
-  <label>Karakter 0 (en başta konuşan) <input type="file" accept="image/*" data-up="c4"></label>
-  <label>Karakter 1 <input type="file" accept="image/*" data-up="c1"></label>
-  <label>Karakter 2 <input type="file" accept="image/*" data-up="c2"></label>
-  <label>Karakter 3 <input type="file" accept="image/*" data-up="c3"></label>
-  <label>Boss <input type="file" accept="image/*" data-up="boss"></label>
-  <label>Patrick <input type="file" accept="image/*" data-up="pat"></label>
-  <small>Seçtiğin resimler sadece senin tarayıcında görünür. Herkese görünsün istiyorsan PNG'leri bana gönder, sayfaya gömeyim.</small>
-</div>
 
 <script id="fs" type="x-shader/x-fragment">
 precision highp float;
@@ -641,12 +673,12 @@ function vib(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 function rnd(a,b){return a+Math.random()*(b-a)}
 
 /* ============ WebGL motoru ============ */
-var canvas=$('gl'), gl=null, prog=null, U={}, Q=(innerWidth<700||/Mobi|Android|iPhone/i.test(navigator.userAgent))?.55:.7;
+var canvas=$('gl'), gl=null, prog=null, U={}, MOB=(innerWidth<820||/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))), Q=MOB?.45:.7, QMAX=MOB?.65:.9, QMIN=MOB?.3:.36;
 var eng={a:5,b:5,mix:0,dur:0,start:0,bang:1,bangStart:0,bangDur:0};
 var FB=['linear-gradient(#020209,#1a1240)','linear-gradient(#04141c,#0b3d2f 60%,#04141c)','linear-gradient(#ff9a5c,#5b2a6b)','linear-gradient(#ffb078,#3a5aa8)','linear-gradient(#1a0f26,#0a1226)','linear-gradient(#f5a35a,#0f3040)'];
 function initGL(){
   try{
-    gl=canvas.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance'})||canvas.getContext('experimental-webgl');
+    gl=canvas.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance',desynchronized:true,preserveDrawingBuffer:false})||canvas.getContext('experimental-webgl');
     if(!gl) return false;
     function sh(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(s));return null}return s}
     var vs=sh(gl.VERTEX_SHADER,'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}');
@@ -664,7 +696,7 @@ function initGL(){
 }
 function resize(){
   if(!gl) return;
-  var dpr=Math.min(window.devicePixelRatio||1,2);
+  var dpr=Math.min(window.devicePixelRatio||1,MOB?1.5:2);
   canvas.width=Math.max(320,Math.floor(innerWidth*dpr*Q));
   canvas.height=Math.max(240,Math.floor(innerHeight*dpr*Q));
   gl.viewport(0,0,canvas.width,canvas.height);
@@ -680,12 +712,13 @@ function startBang(ms){eng.bang=0;eng.bangStart=performance.now();eng.bangDur=ms
 var t0=performance.now(), last=t0, ema=16, slow=0, fast=0, acc=0;
 function frame(now){
   requestAnimationFrame(frame);
+  if(now-last<15) return; /* 120Hz ekranlarda 60fps ile sınırla */
   var dt=now-last; last=now; if(dt>250) dt=16;
   ema=ema*.94+dt*.06; acc+=dt;
   if(acc>1200){
     acc=0;
-    if(ema>27&&Q>.36){Q*=.85;resize()}
-    else if(ema<17.5){fast++; if(fast>6&&Q<.85){Q*=1.08;resize();fast=0}} else fast=0;
+    if(ema>27&&Q>QMIN){Q=Math.max(QMIN,Q*.85);resize()}
+    else if(ema<17.5){fast++; if(fast>6&&Q<QMAX){Q=Math.min(QMAX,Q*1.08);resize();fast=0}} else fast=0;
   }
   if(eng.dur){
     var p=(now-eng.start)/eng.dur;
@@ -702,8 +735,10 @@ function frame(now){
   gl.uniform1f(U.uMix,eng.mix);gl.uniform1f(U.uBang,eng.bang);
   gl.drawArrays(gl.TRIANGLES,0,3);
 }
+canvas.addEventListener('webglcontextlost',function(e){e.preventDefault()});
+canvas.addEventListener('webglcontextrestored',function(){if(initGL())resize()});
 var hasGL=initGL();
-if(hasGL){resize();addEventListener('resize',resize)}
+if(hasGL){resize();var rt=null;function onRs(){clearTimeout(rt);rt=setTimeout(resize,120)}addEventListener('resize',onRs);addEventListener('orientationchange',onRs)}
 else{$('gl').style.display='none';$('fb').style.display='block';$('fb').style.background=FB[5]}
 requestAnimationFrame(frame);
 
@@ -964,17 +999,9 @@ $('yes').onclick=function(){
 };
 $('again').onclick=function(){location.reload()};
 
-/* ============ PNG yükleme ============ */
-$('gear').onclick=function(){$('panel').classList.toggle('on')};
-document.querySelectorAll('[data-up]').forEach(function(inp){
-  inp.addEventListener('change',function(){
-    var f=inp.files&&inp.files[0];if(!f)return;
-    CUSTOM[inp.getAttribute('data-up')]=URL.createObjectURL(f);
-    paint();
-  });
-});
-
 buildSegs();setAnger(0);paint();
+/* resimleri baştan çöz: sahne geçişlerinde takılma olmasın */
+Object.keys(CUSTOM).forEach(function(k){var im=new Image();im.decoding='async';im.src=CUSTOM[k];if(im.decode)im.decode().catch(function(){})});
 </script>
 </body>
 </html>
